@@ -22,7 +22,7 @@ class Tree {
         return node
     }
     insert(value, node = this.root) {
-        if (node === null) node.data = new Node(value);
+        if (node === null) node = new Node(value);
 
         if (node.data === value) throw new Error("No duplicates allowed");
 
