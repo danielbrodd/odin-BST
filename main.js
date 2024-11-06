@@ -29,4 +29,4 @@ tree.deleteItem(50)
 prettyPrint(tree.root)
 
 let res = tree.find(80)
-console.log(`res: ${res}`)
+console.log(`res: ${res.data}`)

@@ -56,14 +56,12 @@ class Tree {
         if (node === null) return node;
 
         if (data < node.data) {
-            this.find(data, node.left);
+            return this.find(data, node.left);
         } else if (data > node.data){
-            this.find(data, node.right)
+            return this.find(data, node.right)
         } else {
-            console.log(node)
             return node
         }
-        return
     }
     _getSuccessor(curr) {
         curr = curr.right;
