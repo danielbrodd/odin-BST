@@ -63,6 +63,25 @@ class Tree {
             return node
         }
     }
+    levelOrder(callback) {
+        if (arguments.length !== 1 && typeof arguments[0] !== 'function'){
+            throw new Error("Callback function required")
+        };
+        let queue = []
+        queue.push(this.root);
+
+        while (queue.length > 0){
+            let node = queue.shift();
+            callback(node);
+            if (node.left !== null){
+                queue.push(node.left);
+            }
+            if (node.right !== null){
+                queue.push(node.right);
+            }
+            
+        }
+    }
     _getSuccessor(curr) {
         curr = curr.right;
 

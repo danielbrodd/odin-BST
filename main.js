@@ -30,3 +30,5 @@ prettyPrint(tree.root)
 
 let res = tree.find(80)
 console.log(`res: ${res.data}`)
+
+tree.levelOrder(console.log)
