@@ -53,7 +53,10 @@ class Tree {
         return node
     }
     find(data, node = this.root) {
-        if (node === null) return node;
+        if (node === null) {
+            console.log('[Error]: Value not found');
+            return undefined
+        };
 
         if (data < node.data) {
             return this.find(data, node.left);
@@ -64,7 +67,7 @@ class Tree {
         }
     }
     levelOrder(callback) {
-        if (arguments.length !== 1 && typeof arguments[0] !== 'function'){
+        if (typeof arguments[0] !== 'function'){
             throw new Error("Callback function required")
         };
         let queue = []
@@ -81,6 +84,92 @@ class Tree {
             }
             
         }
+    }
+    inOrder(callback, node = this.root){
+        if (arguments.length !== 1 && typeof arguments[0] !== 'function'){
+            throw new Error("Callback function required")
+        };
+        if (node === null) return;
+
+        
+        this.inOrder(callback, node.left);
+        callback(node);
+        this.inOrder(callback,node.right)
+    }
+    preOrder(callback, node = this.root){
+        if (typeof arguments[0] !== 'function'){
+            throw new Error("Callback function required")
+        };
+        if(node === null) return
+
+        callback(node);
+        this.preOrder(callback, node.left);
+        this.preOrder(callback, node.right)
+    }
+    postOrder(callback, node = this.root){
+        if (typeof arguments[0] !== 'function'){
+            throw new Error("Callback function required")
+        };
+        if (node === null) return
+
+        this.postOrder(callback, node.left)
+        this.postOrder(callback, node.right)
+        callback(node);
+    }
+    depth(data, node = this.root){
+        if (node === null) return;
+        let depth = 0
+        let queue = [];
+        queue.push(node);
+        while (queue.length > 0) {
+            let n = queue.length;
+            for (let i = 0; i < n; i++) {
+                let curr = queue.shift();
+                if (curr.data === data) return depth
+                if (curr.left !== null) queue.push(curr.left);
+                if (curr.right !== null) queue.push(curr.right);
+            }
+            depth++;
+        }
+        return 'not found'
+    }
+    height(data) {
+        let node = this.find(data);
+        if (node === undefined) return -1
+ 
+        return this._heightHelper(node);
+
+    }
+    isBalanced(node = this.root){
+        if (node === null) return true
+        let leftHeight = node.left ? this.height(node.left.data) : 0;
+        let rightHeight = node.right ? this.height(node.right.data) : 0;
+
+        if (Math.abs(leftHeight - rightHeight) > 1) return false;
+        
+        let isLeftBalanced = this.isBalanced(node.left);
+        let isRightBalanced = this.isBalanced(node.right);
+
+        return isLeftBalanced && isRightBalanced
+    }
+    reBalance(){
+        let newArray = [];
+
+        this.inOrder((node) => {
+            newArray.push(node.data)
+        })
+        if (newArray.length > 0){
+            this.root = this.buildTree(newArray)
+        };
+    }
+    
+    _heightHelper(node) {
+        if (node === null) return -1;
+
+        let leftHeight = this._heightHelper(node.left)
+        let rightHeight = this._heightHelper(node.right)
+
+        return Math.max(leftHeight, rightHeight) + 1
     }
     _getSuccessor(curr) {
         curr = curr.right;
